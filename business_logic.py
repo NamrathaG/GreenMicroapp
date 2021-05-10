@@ -10,12 +10,13 @@ class BusinessLogic():
         description = challenge["description"] if "description" in challenge.keys() else ""
         creator_email = challenge["user_email"]
         creator_name = creator_email.split("@")[0].replace("."," ")
+        image_url= challenge['image_url']
         end_date = challenge["end_date"] if "end_date" in challenge.keys() else None
 
         if not self.db.user_exists(creator_email):
             self.db.create_user(creator_email, creator_name)
         start_date = datetime.now()
-        self.db.create_challenge(title, description, creator_email, start_date, end_date, 1)
+        self.db.create_challenge(title, description, creator_email, start_date, end_date, 1, image_url=image_url)
 
     def get_active_challenges(self):
         return self.db.get_active_challenges()
