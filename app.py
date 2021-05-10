@@ -19,6 +19,34 @@ def create_challenge():
 
     return "", 201
 
+@app.route('/delete_challenges/<int:id>', methods=['DELETE'])
+def delete_challenge(id):
+    business_logic = BusinessLogic()
+    status, message = business_logic.delete_challenge(id)
+    response = {}
+    if not status:
+        response["error"] = message
+        return response, 500
+    
+    else:
+        response["success"] = message
+        return response, 200
+
+@app.route("/update_challenge/<int:id>", methods=['PUT'])
+def update_challenge(id):
+    json_body = request.get_json()
+    business_logic = BusinessLogic()
+    status, message = business_logic.update_challenge(id, json_body)
+
+    response = {}
+    if not status:
+        response["error"] = message
+        return response, 500
+    
+    else:
+        response["success"] = message
+        return response, 201
+
 
 @app.route('/accept_challenge', methods=['POST'])
 def accept_challenge():

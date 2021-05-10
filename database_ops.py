@@ -93,7 +93,47 @@ class DatabaseOperation():
         except Exception as ex:
             print(str(ex))
             raise ex
- 
+    
+    def get_challenge_by_id(self, id):
+        try:
+            cursor = self.cnxn.cursor()
+
+            cursor.execute("SELECT Id,Title,Description,ImageUrl,CreatorId,CreatedDate,EndDate,Active FROM Challenges WHERE Id=?",id)
+            row = cursor.fetchone()
+            challenge = None
+
+            if row:
+                challenge = {}
+                challenge['id'] = row.Id
+                challenge['title'] = row.Title
+                challenge['description'] = row.Description
+                challenge['imageUrl'] = row.ImageUrl
+                challenge['creator'] = row.CreatorId
+                challenge['createdDate'] = row.CreatedDate
+                challenge['endDate'] = row.EndDate
+                challenge['active'] = row.Active
+            
+            return challenge
+        except Exception as ex:
+            print(str(ex))
+            raise ex
+    def delete_challenge(self, id):
+        cursor = self.cnxn.cursor()
+        try:
+            cursor.execute("DELETE FROM Challenges WHERE Id=?",id)
+            cursor.commit()
+        except Exception as ex:
+            print(str(ex))
+            raise ex
+
+    def update_challenge(self, id, title, description, end_date, active=1, image_url=""):
+        try:
+            cursor = self.cnxn.cursor()
+            cursor.execute("UPDATE Challenges SET Title=?,Description=?,ImageUrl=?,EndDate=?,Active=? WHERE Id=?",title,description,image_url,end_date,active,id)
+            cursor.commit()
+        except Exception as ex:
+            print(str(ex))
+            raise ex
  ################################## Challenges Accepted Table
     
     def add_challenge_acceptance(self, user_id, challenge_id):
