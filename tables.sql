@@ -16,6 +16,10 @@ CREATE TABLE Challenges (
     FOREIGN KEY (CreatorId) REFERENCES Users(EmailId)
 );
 
+ALTER TABLE Challenges
+ADD ImageUrl varchar(512);
+
+
 CREATE TABLE ChallengesAccepted (
     Id int NOT NULL IDENTITY(1, 1),
     UserId varchar(255) NOT NULL,

@@ -58,10 +58,10 @@ class DatabaseOperation():
             raise ex
 
     ################################ Challenges Table
-    def create_challenge(self, title, description, creator_email, start_date, end_date=None, active=1):
+    def create_challenge(self, title, description, creator_email, start_date, end_date=None, active=1, image_url=""):
         cursor = self.cnxn.cursor()
         try:
-             cursor.execute("INSERT INTO Challenges(Title,Description,CreatorId,CreatedDate,EndDate,Active) values(?,?,?,?,?,?);",title, description, creator_email, start_date, end_date, active)
+             cursor.execute("INSERT INTO Challenges(Title,Description,CreatorId,CreatedDate,EndDate,Active, ImageUrl) values(?,?,?,?,?,?,?);",title, description, creator_email, start_date, end_date, active, image_url)
              cursor.commit()
              return True
         except Exception as ex:
@@ -71,7 +71,7 @@ class DatabaseOperation():
     def get_active_challenges(self):
         cursor = self.cnxn.cursor()
         try:
-            cursor.execute("SELECT Id,Title,Description,CreatorId,CreatedDate,EndDate,Active from Challenges")
+            cursor.execute("SELECT Id,Title,Description,ImageUrl,CreatorId,CreatedDate,EndDate,Active from Challenges")
              
             row = cursor.fetchone()
             challenges=[]
@@ -80,6 +80,7 @@ class DatabaseOperation():
                 challenge['id'] = row.Id
                 challenge['title'] = row.Title
                 challenge['description'] = row.Description
+                challenge['imageUrl'] = row.ImageUrl
                 challenge['creator'] = row.CreatorId
                 challenge['createdDate'] = row.CreatedDate
                 challenge['endDate'] = row.EndDate
