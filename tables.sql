@@ -35,10 +35,16 @@ CREATE TABLE ChallengesAccepted (
 
 /* different db with collation Latin1_General_100_CI_AS_KS_WS_SC_UTF8*/
 CREATE TABLE Badges (
-badge NVARCHAR(100) 
+badge NVARCHAR(100) NOT NULL, 
+PRIMARY KEY (badge)
 )
-INSERT INTO dbo.Badges (badge) VALUES ('🌍');
-INSERT INTO dbo.Badges (badge) VALUES ('⭐');
-INSERT INTO dbo.Badges (badge) VALUES ('🌞');
-INSERT INTO dbo.Badges (badge) VALUES ('🌱');
-INSERT INTO dbo.Badges (badge) VALUES ('🌲');
+
+
+ALTER TABLE Challenges
+ADD Badge NVARCHAR(100);
+
+ALTER TABLE ChallengesAccepted
+ALTER COLUMN reward NVARCHAR(100);
+
+-- ALTER TABLE Challenges
+-- ALTER COLUMN Description varchar(50000) NULL

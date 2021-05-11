@@ -75,3 +75,17 @@ def get_accepted_challenges():
     business_logic = BusinessLogic()
 
     return Response(business_logic.get_accepted_challenges(), 200, mimetype='application/json')
+
+
+@app.route('/get_badges', methods=['GET'])
+def get_badges():
+    business_logic = BusinessLogic()
+
+    return Response(business_logic.get_badges(), 200, mimetype='application/json')
+
+@app.route('/get_leaderboard', methods=['GET'])
+def get_leaderboard():
+    business_logic = BusinessLogic()
+
+    return Response(business_logic.get_leaderboard(), 200, mimetype='application/json')
+

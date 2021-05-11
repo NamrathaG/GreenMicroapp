@@ -12,12 +12,13 @@ class BusinessLogic():
         creator_name = creator_email.split("@")[0].replace("."," ")
         image_url= challenge['image_url'] 
         end_date = challenge["end_date"] if "end_date" in challenge.keys() else None
+        badge = challenge['badge']
 
         if not self.db.user_exists(creator_email):
             self.db.create_user(creator_email, creator_name)
         start_date = datetime.now()
-        self.db.create_challenge(title, description, creator_email, start_date, end_date, 1, image_url=image_url)
-
+        self.db.create_challenge(title, description, creator_email, start_date, end_date, 1, image_url=image_url, badge=badge)
+    
     def delete_challenge(self, id):
         challenge = self.db.get_challenge_by_id(id)
 
@@ -63,3 +64,9 @@ class BusinessLogic():
     def get_accepted_challenges(self):
         return self.db.get_accepted_challenges()
 
+    
+    def get_badges(self):
+        return self.db.get_badges()
+
+    def get_leaderboard(self):
+        return self.db.get_leaderboard()
