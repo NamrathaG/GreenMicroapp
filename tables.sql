@@ -29,3 +29,16 @@ CREATE TABLE ChallengesAccepted (
     CONSTRAINT FK_UserChallengeAccepted FOREIGN KEY (UserId) REFERENCES Users(EmailId),
     CONSTRAINT FK_ChallengeChallengeAccepted FOREIGN KEY (ChallengeId) REFERENCES Challenges(Id) ON DELETE CASCADE
 );
+
+
+
+
+/* different db with collation Latin1_General_100_CI_AS_KS_WS_SC_UTF8*/
+CREATE TABLE Badges (
+badge NVARCHAR(100) 
+)
+INSERT INTO dbo.Badges (badge) VALUES ('🌍');
+INSERT INTO dbo.Badges (badge) VALUES ('⭐');
+INSERT INTO dbo.Badges (badge) VALUES ('🌞');
+INSERT INTO dbo.Badges (badge) VALUES ('🌱');
+INSERT INTO dbo.Badges (badge) VALUES ('🌲');
