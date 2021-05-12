@@ -6,10 +6,10 @@ import os
 
 class DatabaseOperation():
     def __init__(self):
-        server = os.environ["DB_SERVER"]
-        database = os.environ["DATABASE"]
-        username = os.environ["DB_USERNAME"]
-        password = os.environ["DB_PASSWORD"]
+        server = "greenappserver.database.windows.net"
+        database = "unicodedb"
+        username = "nsroot"
+        password = "citrix@12345"
 
         self.cnxn = po.connect('DRIVER={ODBC Driver 17 for SQL Server};SERVER=' +server+';DATABASE='+database+';UID='+username+';PWD=' + password)
 
@@ -95,15 +95,14 @@ class DatabaseOperation():
             print(str(ex))
             raise ex
     
-    def get_challenge_by_id(self, id):
+    def get_challenge_by_id(self,id):
+        cursor = self.cnxn.cursor()
         try:
-            cursor = self.cnxn.cursor()
-
-            cursor.execute("SELECT Id,Title,Description,ImageUrl,CreatorId,CreatedDate,EndDate,Active,Badge FROM Challenges WHERE Id=?",id)
+            cursor.execute("SELECT Id,Title,Description,ImageUrl,CreatorId,CreatedDate,EndDate,Active,Badge from Challenges WHERE Id=?",id)
+             
             row = cursor.fetchone()
-            challenge = None
-
-            if row:
+            challenges=[]
+            while row:
                 challenge = {}
                 challenge['id'] = row.Id
                 challenge['title'] = row.Title
@@ -114,8 +113,35 @@ class DatabaseOperation():
                 challenge['endDate'] = row.EndDate
                 challenge['active'] = row.Active
                 challenge['badge'] = row.Badge
+
+                challenges.append(challenge)
+                row = cursor.fetchone()
+
+            return json.dumps(challenges, indent=4, default=self.myconverter)
+        except Exception as ex:
+            print(str(ex))
+            raise ex
+    
+    def get_challenge_by_id(self, id):
+        try:
+            cursor = self.cnxn.cursor()
+
+            cursor.execute("SELECT Id,Title,Description,ImageUrl,CreatorId,CreatedDate,EndDate,Active,Badge FROM Challenges WHERE Id=?",id)
+            row = cursor.fetchone()
+            challenge = {}
+
+            if row:
+                challenge['id'] = row.Id
+                challenge['title'] = row.Title
+                challenge['description'] = row.Description
+                challenge['imageUrl'] = row.ImageUrl
+                challenge['creator'] = row.CreatorId
+                challenge['createdDate'] = row.CreatedDate
+                challenge['endDate'] = row.EndDate
+                challenge['active'] = row.Active
+                challenge['badge'] = row.Badge
             
-            return challenge
+            return json.dumps(challenge, indent=4, default=self.myconverter)
         except Exception as ex:
             print(str(ex))
             raise ex
@@ -148,25 +174,26 @@ class DatabaseOperation():
             print(str(ex))
             raise ex
 
-    def update_challenge_acceptance(self, user_id, challenge_id, completed = 0, photo_url = "", comment = "", reward = 0):
+    def update_challenge_acceptance(self, user_id, challenge_id, completed = 0, photo_url = None, comment = None, reward = 0):
         cursor = self.cnxn.cursor()
         try:
-             cursor.execute("UPDATE ChallengesAccepted SET Completed = %d ,PhotoUrl= %s,Comment = %s,Reward = %d WHERE UserId = %s AND ChallengeId = %d" % (completed, photo_url, comment, reward, user_id, challenge_id) )
+             cursor.execute("UPDATE ChallengesAccepted SET Completed = ? ,PhotoUrl= ?,Comment = ?,Reward = ? WHERE UserId = ? AND ChallengeId = ?" ,completed, photo_url, comment, reward, user_id, challenge_id)
              cursor.commit()
              return True
         except Exception as ex:
             print(str(ex))
             raise ex
-
+            
     def get_accepted_challenges(self):
         cursor = self.cnxn.cursor()
         try:
-            cursor.execute("SELECT Challenges.Title, Challenges.CreatorId, ChallengesAccepted.UserId,ChallengesAccepted.ChallengeId,ChallengesAccepted.Completed,ChallengesAccepted.PhotoUrl,ChallengesAccepted.Comment,ChallengesAccepted.Reward FROM ChallengesAccepted LEFT JOIN Challenges ON Challenges.Id = ChallengesAccepted.ChallengeId")
+            cursor.execute("SELECT Challenges.Title, Challenges.CreatorId,  ChallengesAccepted.Id, ChallengesAccepted.UserId,ChallengesAccepted.ChallengeId,ChallengesAccepted.Completed,ChallengesAccepted.PhotoUrl,ChallengesAccepted.Comment,ChallengesAccepted.Reward FROM ChallengesAccepted LEFT JOIN Challenges ON Challenges.Id = ChallengesAccepted.ChallengeId")
              
             row = cursor.fetchone()
             challenges=[]
             while row:
                 challenge = {}
+                challenge['accept_id'] = row.Id
                 challenge['title'] = row.Title
                 challenge['creator'] = row.CreatorId
                 challenge['userId'] = row.UserId

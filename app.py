@@ -63,6 +63,12 @@ def get_challenges():
 
     return Response(business_logic.get_active_challenges(), 200, mimetype='application/json')
 
+@app.route('/get_challenge_by_id/<int:id>', methods=['GET'])
+def get_challenge_by_id(id):
+    business_logic = BusinessLogic()
+
+    return Response(business_logic.get_challenge_by_id(id), 200, mimetype='application/json')
+
 
 @app.route('/get_users', methods=['GET'])
 def get_users():
@@ -88,4 +94,13 @@ def get_leaderboard():
     business_logic = BusinessLogic()
 
     return Response(business_logic.get_leaderboard(), 200, mimetype='application/json')
+
+@app.route('/upload_challenge', methods=['PUT'])
+def upload_challenge():
+    json_body = request.get_json()
+    business_logic = BusinessLogic()
+    business_logic.upload_challenge(json_body)
+
+    return "", 201    
+
 

@@ -51,6 +51,9 @@ class BusinessLogic():
 
     def get_active_challenges(self):
         return self.db.get_active_challenges()
+
+    def get_challenge_by_id(self,id):
+        return self.db.get_challenge_by_id(id)
     
     
     def accept_challenge(self, body):
@@ -70,3 +73,12 @@ class BusinessLogic():
 
     def get_leaderboard(self):
         return self.db.get_leaderboard()
+
+    def upload_challenge(self, payload):
+        comment = payload['comment']
+        photo_url = payload['photo_url']
+        user_id = payload['user_id']
+        challenge_id = int(payload['challenge_id'])
+
+        status = self.db.update_challenge_acceptance(user_id, challenge_id, completed=1, photo_url=photo_url, comment=comment)
+        
