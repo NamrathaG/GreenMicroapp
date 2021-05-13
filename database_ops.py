@@ -6,10 +6,10 @@ import os
 
 class DatabaseOperation():
     def __init__(self):
-        server = "greenappserver.database.windows.net"
-        database = "unicodedb"
-        username = "nsroot"
-        password = "citrix@12345"
+        server = os.environ["DB_SERVER"]
+        database = os.environ["DATABASE"]
+        username = os.environ["DB_USERNAME"]
+        password = os.environ["DB_PASSWORD"]
 
         self.cnxn = po.connect('DRIVER={ODBC Driver 17 for SQL Server};SERVER=' +server+';DATABASE='+database+';UID='+username+';PWD=' + password)
 
@@ -95,33 +95,6 @@ class DatabaseOperation():
             print(str(ex))
             raise ex
     
-    def get_challenge_by_id(self,id):
-        cursor = self.cnxn.cursor()
-        try:
-            cursor.execute("SELECT Id,Title,Description,ImageUrl,CreatorId,CreatedDate,EndDate,Active,Badge from Challenges WHERE Id=?",id)
-             
-            row = cursor.fetchone()
-            challenges=[]
-            while row:
-                challenge = {}
-                challenge['id'] = row.Id
-                challenge['title'] = row.Title
-                challenge['description'] = row.Description
-                challenge['imageUrl'] = row.ImageUrl
-                challenge['creator'] = row.CreatorId
-                challenge['createdDate'] = row.CreatedDate
-                challenge['endDate'] = row.EndDate
-                challenge['active'] = row.Active
-                challenge['badge'] = row.Badge
-
-                challenges.append(challenge)
-                row = cursor.fetchone()
-
-            return json.dumps(challenges, indent=4, default=self.myconverter)
-        except Exception as ex:
-            print(str(ex))
-            raise ex
-    
     def get_challenge_by_id(self, id):
         try:
             cursor = self.cnxn.cursor()
@@ -140,8 +113,11 @@ class DatabaseOperation():
                 challenge['endDate'] = row.EndDate
                 challenge['active'] = row.Active
                 challenge['badge'] = row.Badge
+
+                return json.dumps(challenge, indent=4, default=self.myconverter)
+            else:
+                return None
             
-            return json.dumps(challenge, indent=4, default=self.myconverter)
         except Exception as ex:
             print(str(ex))
             raise ex
