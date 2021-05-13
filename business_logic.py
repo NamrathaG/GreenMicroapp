@@ -1,5 +1,6 @@
 from database_ops import DatabaseOperation
 from datetime import datetime
+import json
 
 class BusinessLogic():
     def __init__(self):
@@ -31,8 +32,9 @@ class BusinessLogic():
             return False, error
 
     def update_challenge(self, id, body):
-        challenge = self.db.get_challenge_by_id(id)
-        if challenge:
+        challenge_details = self.db.get_challenge_by_id(id)
+        if challenge_details:
+            challenge = json.loads(challenge_details)
             title = body["title"] if "title" in body.keys() else challenge['title']
             description = body["description"] if "description" in body.keys() else challenge['description']
             creator_email = body["user_email"] if "user_email" in body.keys() else challenge['creator']
