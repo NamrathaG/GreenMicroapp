@@ -130,10 +130,10 @@ class DatabaseOperation():
             print(str(ex))
             raise ex
 
-    def update_challenge(self, id, title, description, end_date, active=1, image_url=""):
+    def update_challenge(self, id, title, description, end_date, badge, active=1, image_url=""):
         try:
             cursor = self.cnxn.cursor()
-            cursor.execute("UPDATE Challenges SET Title=?,Description=?,ImageUrl=?,EndDate=?,Active=? WHERE Id=?",title,description,image_url,end_date,active,id)
+            cursor.execute("UPDATE Challenges SET Title=?,Description=?,ImageUrl=?,EndDate=?, Badge=?, Active=? WHERE Id=?",title,description,image_url,end_date,badge,active,id)
             cursor.commit()
         except Exception as ex:
             print(str(ex))

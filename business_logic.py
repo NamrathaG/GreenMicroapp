@@ -42,8 +42,9 @@ class BusinessLogic():
             image_url= body['image_url'] if "image_url" in body.keys() else challenge['imageUrl']
             end_date = body["end_date"] if "end_date" in body.keys() else challenge['endDate']
             active = body['active'] if 'active' in body.keys() else challenge['active']
+            badge = body['badge'] if 'badge' in body.keys() else challenge['badge']
 
-            self.db.update_challenge(id, title, description, end_date, active, image_url)
+            self.db.update_challenge(id, title, description, end_date, badge, active, image_url)
             return True, "Record Updated Successfully"
         else:
             error = "Challenge with id: %s does not exists"%id
