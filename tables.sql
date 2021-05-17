@@ -1,9 +1,3 @@
-CREATE TABLE Users (
-    EmailId varchar(255) NOT NULL,
-    UserName varchar(255) NOT NULL,
-    PRIMARY KEY (EmailId)
-);
-
 CREATE TABLE Challenges (
     Id int NOT NULL IDENTITY(1, 1),
     Title varchar(255) NOT NULL,
@@ -14,8 +8,7 @@ CREATE TABLE Challenges (
     EndDate date NULL,
     Active BIT NOT NULL,
     Badge NVARCHAR(100) NOT NULL,
-    PRIMARY KEY (Id),
-    CONSTRAINT FK_UserChallenge FOREIGN KEY (CreatorId) REFERENCES Users(EmailId) ON DELETE CASCADE
+    PRIMARY KEY (Id)
 );
 
 CREATE TABLE ChallengesAccepted (
@@ -24,10 +17,9 @@ CREATE TABLE ChallengesAccepted (
     ChallengeId int NOT NULL,
     Completed BIT NOT NULL,
     PhotoUrl varchar(MAX),
-    Comment varchar(255),
+    Comment varchar(8000),
     Reward NVARCHAR(100) NULL,
-    PRIMARY KEY (Id),
-    CONSTRAINT FK_UserChallengeAccepted FOREIGN KEY (UserId) REFERENCES Users(EmailId),
+    PRIMARY KEY (UserId,ChallengeId),
     CONSTRAINT FK_ChallengeChallengeAccepted FOREIGN KEY (ChallengeId) REFERENCES Challenges(Id) ON DELETE CASCADE
 );
 
@@ -46,14 +38,17 @@ PRIMARY KEY (badge)
 -- ALTER TABLE Challenges
 -- ALTER COLUMN Description VARCHAR(8000) NULL
 
-ALTER TABLE Challenges  
-DROP CONSTRAINT FK_UserChallenge; 
+-- ALTER TABLE Challenges  
+-- DROP CONSTRAINT FK_UserChallenge; 
 
-ALTER TABLE ChallengesAccepted  
-DROP CONSTRAINT FK_UserChallengeAccepted; 
+-- ALTER TABLE ChallengesAccepted  
+-- DROP CONSTRAINT FK_UserChallengeAccepted; 
 
-ALTER TABLE ChallengesAccepted
-DROP PRIMARY KEY;
+-- ALTER TABLE ChallengesAccepted
+-- DROP PRIMARY KEY;
 
-ALTER TABLE ChallengesAccepted
-ADD PRIMARY KEY (UserId, ChallengeId);
+-- ALTER TABLE ChallengesAccepted
+-- ADD PRIMARY KEY (UserId, ChallengeId);
+
+-- ALTER TABLE ChallengesAccepted
+-- ALTER column Comment varchar(8000)
