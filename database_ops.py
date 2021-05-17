@@ -150,6 +150,18 @@ class DatabaseOperation():
             print(str(ex))
             raise ex
 
+    def is_challenge_accepted(self, user_id, challenge_id):
+        cursor = self.cnxn.cursor()
+        try:
+            cursor.execute("SELECT * FROM ChallengesAccepted WHERE UserId=? AND ChallengeId=?",user_id,challenge_id)
+            row = cursor.fetchone()
+            if row:
+                return True
+            else:
+                return False
+        except Exception as ex:
+            print(str(ex))
+            raise ex
     def update_challenge_acceptance(self, user_id, challenge_id, completed = 0, photo_url = None, comment = None, reward = 0):
         cursor = self.cnxn.cursor()
         try:

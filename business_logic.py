@@ -62,7 +62,8 @@ class BusinessLogic():
     def accept_challenge(self, body):
         user_id = body["user_id"]
         challenge_id = body["challenge_id"]
-        self.db.add_challenge_acceptance(user_id, challenge_id)
+        if not self.db.is_challenge_accepted(user_id=user_id, challenge_id=challenge_id):
+            self.db.add_challenge_acceptance(user_id, challenge_id)
 
     def get_users(self):
         return self.db.get_users()
