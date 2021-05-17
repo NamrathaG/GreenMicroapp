@@ -15,8 +15,8 @@ class BusinessLogic():
         end_date = challenge["end_date"] if "end_date" in challenge.keys() else None
         badge = challenge['badge']
 
-        if not self.db.user_exists(creator_email):
-            self.db.create_user(creator_email, creator_name)
+        # if not self.db.user_exists(creator_email):
+        #     self.db.create_user(creator_email, creator_name)
         start_date = datetime.now()
         self.db.create_challenge(title, description, creator_email, start_date, end_date, 1, image_url=image_url, badge=badge)
     

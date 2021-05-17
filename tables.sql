@@ -45,3 +45,15 @@ PRIMARY KEY (badge)
 
 -- ALTER TABLE Challenges
 -- ALTER COLUMN Description VARCHAR(8000) NULL
+
+ALTER TABLE Challenges  
+DROP CONSTRAINT FK_UserChallenge; 
+
+ALTER TABLE ChallengesAccepted  
+DROP CONSTRAINT FK_UserChallengeAccepted; 
+
+ALTER TABLE ChallengesAccepted
+DROP PRIMARY KEY;
+
+ALTER TABLE ChallengesAccepted
+ADD PRIMARY KEY (UserId, ChallengeId);

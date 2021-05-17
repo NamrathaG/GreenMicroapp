@@ -25,37 +25,37 @@ class DatabaseOperation():
         else:
             return False
     ####################################### User table
-    def create_user(self, email, username):
-        cursor = self.cnxn.cursor()
+    # def create_user(self, email, username):
+    #     cursor = self.cnxn.cursor()
     
-        # Fetch data into a cursor
-        try:
-            cursor.execute("Insert INTO Users(EmailId,UserName) values(?,?)",email, username)
-            cursor.commit()
-            return True
-        except Exception as ex:
-            print(str(ex))
-            raise ex
+    #     # Fetch data into a cursor
+    #     try:
+    #         cursor.execute("Insert INTO Users(EmailId,UserName) values(?,?)",email, username)
+    #         cursor.commit()
+    #         return True
+    #     except Exception as ex:
+    #         print(str(ex))
+    #         raise ex
 
-    def get_users(self):
-        cursor = self.cnxn.cursor()
-        try:
-            cursor.execute("SELECT EmailId,UserName from Users")
+    # def get_users(self):
+    #     cursor = self.cnxn.cursor()
+    #     try:
+    #         cursor.execute("SELECT EmailId,UserName from Users")
              
-            row = cursor.fetchone()
-            challenges=[]
-            while row:
-                challenge = {}
-                challenge['emailId'] = row.EmailId
-                challenge['userName'] = row.UserName
+    #         row = cursor.fetchone()
+    #         challenges=[]
+    #         while row:
+    #             challenge = {}
+    #             challenge['emailId'] = row.EmailId
+    #             challenge['userName'] = row.UserName
 
-                challenges.append(challenge)
-                row = cursor.fetchone()
+    #             challenges.append(challenge)
+    #             row = cursor.fetchone()
 
-            return json.dumps(challenges, indent=4, default=self.myconverter)
-        except Exception as ex:
-            print(str(ex))
-            raise ex
+    #         return json.dumps(challenges, indent=4, default=self.myconverter)
+    #     except Exception as ex:
+    #         print(str(ex))
+    #         raise ex
 
     ################################ Challenges Table
     def create_challenge(self, title, description, creator_email, start_date, end_date=None, active=1, image_url="", badge="⭐"):
@@ -175,7 +175,7 @@ class DatabaseOperation():
     def get_accepted_challenges(self):
         cursor = self.cnxn.cursor()
         try:
-            cursor.execute("SELECT Challenges.Title, Challenges.CreatorId,  ChallengesAccepted.Id, ChallengesAccepted.UserId,ChallengesAccepted.ChallengeId,ChallengesAccepted.Completed,ChallengesAccepted.PhotoUrl,ChallengesAccepted.Comment,ChallengesAccepted.Reward FROM ChallengesAccepted LEFT JOIN Challenges ON Challenges.Id = ChallengesAccepted.ChallengeId")
+            cursor.execute("SELECT Challenges.Title, Challenges.Description, Challenges.Badge, Challenges.ImageUrl, Challenges.CreatorId,  ChallengesAccepted.Id, ChallengesAccepted.UserId,ChallengesAccepted.ChallengeId,ChallengesAccepted.Completed,ChallengesAccepted.PhotoUrl,ChallengesAccepted.Comment,ChallengesAccepted.Reward FROM ChallengesAccepted LEFT JOIN Challenges ON Challenges.Id = ChallengesAccepted.ChallengeId")
              
             row = cursor.fetchone()
             challenges=[]
@@ -183,6 +183,9 @@ class DatabaseOperation():
                 challenge = {}
                 challenge['accept_id'] = row.Id
                 challenge['title'] = row.Title
+                challenge['description'] = row.Description
+                challenge['badge'] = row.Badge
+                challenge['ImageUrl'] = row.ImageUrl
                 challenge['creator'] = row.CreatorId
                 challenge['userId'] = row.UserId
                 challenge['challengeId'] = row.ChallengeId
