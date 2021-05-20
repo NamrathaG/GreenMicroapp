@@ -175,12 +175,13 @@ class DatabaseOperation():
     def get_accepted_challenges(self):
         cursor = self.cnxn.cursor()
         try:
-            cursor.execute("SELECT Challenges.Title, Challenges.Description, Challenges.Badge, Challenges.ImageUrl, Challenges.CreatorId,  ChallengesAccepted.Id, ChallengesAccepted.UserId,ChallengesAccepted.ChallengeId,ChallengesAccepted.Completed,ChallengesAccepted.PhotoUrl,ChallengesAccepted.Comment,ChallengesAccepted.Reward FROM ChallengesAccepted LEFT JOIN Challenges ON Challenges.Id = ChallengesAccepted.ChallengeId")
+            cursor.execute("SELECT Challenges.Title, Challenges.CreatedDate, Challenges.Description, Challenges.Badge, Challenges.ImageUrl, Challenges.CreatorId,  ChallengesAccepted.Id, ChallengesAccepted.UserId,ChallengesAccepted.ChallengeId,ChallengesAccepted.Completed,ChallengesAccepted.PhotoUrl,ChallengesAccepted.Comment,ChallengesAccepted.Reward FROM ChallengesAccepted LEFT JOIN Challenges ON Challenges.Id = ChallengesAccepted.ChallengeId")
              
             row = cursor.fetchone()
             challenges=[]
             while row:
                 challenge = {}
+                challenge['createdDate'] = row.CreatedDate
                 challenge['accept_id'] = row.Id
                 challenge['title'] = row.Title
                 challenge['description'] = row.Description
